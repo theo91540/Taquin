@@ -82,6 +82,16 @@ public class Etat
 		return successeurs.toArray(new Etat[successeurs.size()]);
 	}
 
+	public int[] epsilon()
+	{
+		int[] epsilon = new int[N*N];
+		for(int i=0; i<etat.length; i++)
+		{
+			epsilon[etat[i]] = Math.abs((etat[i]%N) - (i%N)) + Math.abs((etat[i]/N) - (i/N));
+		}
+		return epsilon;
+	}
+
 	public int distanceEtatFinal(int d)
 	{
 		int somme = 0;
@@ -92,15 +102,10 @@ public class Etat
 						 {8,7,6,5,3,2,4,1,0},
 						 {1,1,1,1,1,1,1,1,0}};
 
-		int[] epsilon = new int[N*N];
-		for(int i=0; i<etat.length; i++)
-		{
-			epsilon[etat[i]] = Math.abs((etat[i]%N) - (i%N)) + Math.abs((etat[i]/N) - (i/N));
-		}
-
+		int[] epsilon = epsilon();
 		for(int i=0;i<epsilon.length; i++)
 		{
-			somme += (epsilon[i] * poids[d-1][i]);
+			somme += (epsilon[i] * poids[d-1][i%9]);
 		}
 
 		return somme / ((d%2==0)?1:4);
@@ -114,6 +119,37 @@ public class Etat
 			if(etat[i]>etat[i+1])
 				etatFinal = false;
 		return etatFinal;
+	}
+
+	public boolean estSoluble()
+	{
+		boolean tab_en_ordre = false;
+
+		int[] copie = (int[]) this.etat.clone();
+		int[] epsilon = epsilon();
+
+    	int taille = copie.length;
+    	int temp;
+    	int nb_echanges = 0;
+
+	    while(!tab_en_ordre)
+	    {
+	        tab_en_ordre = true;
+	        for(int i=0 ; i < taille-1 ; i++)
+	        {
+	            if(copie[i] > copie[i+1])
+	            {
+	                temp = copie[i];
+	                copie[i] = copie[i+1];
+	                copie[i+1] = temp;
+	                nb_echanges++;
+	                tab_en_ordre = false;
+	            }
+	        }
+	        taille--;
+	    }
+
+	    return (nb_echanges%2)==(epsilon[etat.length-1]%2);
 	}
 
 	public int compareTo(Etat e2)
