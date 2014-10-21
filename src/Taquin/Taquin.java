@@ -8,23 +8,24 @@ public class Taquin
 	{
 		final int N = 3;
 		final int DISTANCE_MANHATTAN = 4;
-
-		Etat etat_initial = new Etat(etatAleatoire(N), N); 
+		
+		Etat etat_initial = etatAleatoire(N); 
 	
-		System.out.println("Début de la resolution du Taquin ("+N+"x"+N+") ...");
+		/*
+			do
+			{
+				etat_initial = saisirEtat(N);
+			} while(!etat_initial.estSoluble());
+		*/
 
-		CheminPriorite chemin_resolution = resolutionTaquin(etat_initial, DISTANCE_MANHATTAN);
+		System.out.println("Début de la résolution du Taquin ("+N+"x"+N+") ...");
 
-		Etat[] chemin = chemin_resolution.getChemin();
+		Solution solution = resolutionTaquin(etat_initial, DISTANCE_MANHATTAN);
 
-		for(int i=0; i<chemin.length; i++)
-		{
-			System.out.println("Etape n°" + i + ":");
-			afficherEtat(chemin[i]);		
-		}
+		System.out.println(solution.toString());
 	}
 
-	public static CheminPriorite resolutionTaquin(Etat etat_initial, int d)
+	public static Solution resolutionTaquin(Etat etat_initial, int d)
 	{
 		long startTime = System.currentTimeMillis();
 
@@ -33,7 +34,7 @@ public class Taquin
 
 		CheminPriorite C1 = F.getCheminMinimal();
 		if(C1.getSommet().etatFinal())
-			return C1;
+			return new Solution(C1, 0, d, 1, 0);
 
 		boolean fini = false;
 		while(!fini && F.getTaille()>0)
@@ -49,12 +50,7 @@ public class Taquin
 					fini = true;
 					C.ajouterEtat(S[i]);
 					long endTime = System.currentTimeMillis();
-					System.out.println("Solution du taquin trouvé en " + (endTime-startTime) + "ms.");
-					System.out.println("Distance de Manhattan choisie: d" + d);
-					System.out.println("Nombre d'etat parcouru: " + D.nombreEtatsVisites());
-					System.out.println("Nombre d'etat sortis de la file: " + F.getNombreEtatsSortis());
-					System.out.println("Taille du chemin de la solution: " + C.getChemin().length);
-					return C;
+					return new Solution(C, (endTime-startTime), d, D.nombreEtatsVisites(), F.getNombreEtatsSortis());
 				}
 							
 				if(!D.contientEtat(S[i]))
@@ -68,10 +64,10 @@ public class Taquin
 			}
 		}
 
-		return C1;
+		return new Solution(C1, 0, d, D.nombreEtatsVisites(), F.getNombreEtatsSortis());
 	}
 
-	public static Etat saisirEtatInitial(int N) 
+	public static Etat saisirEtat(int N) 
 	{
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Saisir un Taquin ("+N+"x"+N+"): ");
@@ -82,7 +78,7 @@ public class Taquin
 		return new Etat(e, N);
 	}
 
-	public static int[] etatAleatoire(int N)
+	public static Etat etatAleatoire(int N)
 	{
 		int[] T = new int[N*N];
 		int temp, k, trou = 0;
@@ -108,7 +104,7 @@ public class Taquin
 			T[(trou+2)%N] = temp;
 		}
 
-		return T;
+		return new Etat(T,N);
 	}
 
 	public static void afficherEtat(Etat e)
