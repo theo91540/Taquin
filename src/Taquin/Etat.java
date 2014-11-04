@@ -171,12 +171,12 @@ public class Etat
 		for(int i=0; i<etat.length; i++)
 		{
 			if(etat[i] == etat.length-1)
-				s += "X|";
+				s += "|X";
 			else
-				s += etat[i] + "|";
+				s += "|" + etat[i] ;
 
 			if(i%N==(N-1))
-				s += "\n";
+				s += "|\n";
 		}
 		return s;
 	}
