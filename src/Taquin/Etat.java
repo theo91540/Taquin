@@ -180,4 +180,9 @@ public class Etat
 		}
 		return s;
 	}
+
+	public int[] getTab()
+	{
+		return this.etat;
+	}
 }

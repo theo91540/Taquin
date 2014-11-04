@@ -7,22 +7,35 @@ public class Taquin
 	public static void main(String[] args)
 	{
 		final int N = 3;
-		final int DISTANCE_MANHATTAN = 4;
+		final int NB_MAX = 10000;
 		
-		Etat etat_initial = etatAleatoire(N); 
-	
-		/*
-			do
+		long startTime = System.currentTimeMillis();
+/*
+		for(int d=1; d<=6; d++)
+		{
+			ArrayList<Solution> solutions = new ArrayList<Solution>();
+			for(int i=0; i<NB_MAX; i++)
 			{
-				etat_initial = saisirEtat(N);
-			} while(!etat_initial.estSoluble());
-		*/
+					Etat etat_initial = etatAleatoire(N); 
+					solutions.add(resolutionTaquin(etat_initial, d));
+			}
+			
+			long somme = 0;
+			for(int i=0; i<solutions.size(); i++)
+				somme += solutions.get(i).getDuree();
+		
+			System.out.println("Temps moyen de résolution d'un taquin pour d"+d+" ("+NB_MAX+" taquins résolus): " + (somme/solutions.size()) + "ms.");
+		}
 
-		System.out.println("Début de la résolution du Taquin ("+N+"x"+N+") ...");
+		long endTime = System.currentTimeMillis();
 
-		Solution solution = resolutionTaquin(etat_initial, DISTANCE_MANHATTAN);
+	*/
+		Etat etat_initial = etatAleatoire(N); 
+		Solution s = resolutionTaquin(etat_initial, 1);
 
-		System.out.println(solution.toString());
+		System.out.println(s.toString());
+		
+		// System.out.println("Durée du programme pour 1 taquins à résoudre: " + ((endTime-startTime)/1000)/60 + "min" + ((endTime-startTime)/1000)%60 + "s.");
 	}
 
 	public static Solution resolutionTaquin(Etat etat_initial, int d)
