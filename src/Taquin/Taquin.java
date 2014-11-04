@@ -101,7 +101,7 @@ public class Taquin
 		for(int i=0; i<T.length; i++)
 		{
 			Random r = new Random();
-			k = r.nextInt(N-1); 
+			k = r.nextInt((N*N)-1); 
 			temp = T[i];
 			T[i] = T[k];
 			T[k] = temp;
