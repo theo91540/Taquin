@@ -7,24 +7,43 @@ import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JLabel;
 import java.awt.Color;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 public class Fenetre extends JFrame
 {
+    private JPanel top;
     private JPanel taquin;
     private JPanel bottom;
-    private int K;
+    private int etape;
     private Etat[] chemin;
+    private JLabel label;
     private JButton suivant;
     private JButton precedent;
 
+    private JMenuBar menuBar = new JMenuBar();
+    private JMenu menu_fichier = new JMenu("Fichier");
+    private JMenu menu_fichier_nouveau = new JMenu("Nouveau");
+    private JMenu menu_edition = new JMenu("Edition");
+    private JMenuItem item1 = new JMenuItem("Aléatoire");
+    private JMenuItem item2 = new JMenuItem("Manuel");
+    private JMenuItem item3 = new JMenuItem("Début");
+    private JMenuItem item4 = new JMenuItem("Fin");
+    private JMenuItem item5 = new JMenuItem("Quitter");
+  
   public Fenetre()
   {
     this.setTitle("Taquin");
     this.setSize(300, 300);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setLocationRelativeTo(null);
-    this.K = 0;
+    
+    etape = 0;
+    
+    top = new JPanel();
     taquin = new JPanel();
     bottom = new JPanel();
 
@@ -35,16 +54,18 @@ public class Fenetre extends JFrame
     Solution solution = Taquin.resolutionTaquin(etat_initial, 1);
     chemin = solution.getCheminPriorite().getChemin();
 
+    this.getContentPane().add(top, BorderLayout.NORTH);
     this.getContentPane().add(taquin, BorderLayout.CENTER);
     this.getContentPane().add(bottom, BorderLayout.SOUTH);
 
+    label = new JLabel();
     precedent = new JButton("<-");
     suivant = new JButton("->");
 
      precedent.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event)
             {
-                K--;
+                etape--;
                 display();
                 getContentPane().revalidate();
             }
@@ -53,15 +74,26 @@ public class Fenetre extends JFrame
     suivant.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event)
             {
-                K++;
+                etape++;
                 display();
-                getContentPane().revalidate();
             }
         });
 
     display();
 
-     this.setVisible(true);
+    menu_fichier_nouveau.add(item1);
+    menu_fichier_nouveau.add(item2);
+    menu_fichier.add(menu_fichier_nouveau);
+    menu_fichier.add(item5);
+    menu_edition.add(item3);
+    menu_edition.add(item4);
+    menuBar.add(menu_fichier);
+    menuBar.add(menu_edition);
+    setJMenuBar(menuBar);
+
+    initMenu();
+
+    this.setVisible(true);
   }    
 
   public void afficherTaquin(Etat etat)
@@ -85,18 +117,50 @@ public class Fenetre extends JFrame
 
   public void display()
   {
-    afficherTaquin(chemin[K]);
+    label.setText("Etape " + etape + " sur " + (chemin.length-1));
+    top.removeAll();
+    top.add(label);
+
+    afficherTaquin(chemin[etape]);
 
     bottom.removeAll();
-    if(K>0)
-        bottom.add(precedent);
-    else 
-        bottom.add(new JPanel());
+    bottom.add((etape > 0?precedent:(new JPanel())));
+    bottom.add((etape < chemin.length-1?suivant:(new JPanel())));
 
-    if(K < chemin.length-1)
-        bottom.add(suivant);
-    else 
-        bottom.add(new JPanel());
+    getContentPane().revalidate();
+  }
+
+  public void initMenu()
+  {
+    item1.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent event){
+        Etat etat_initial = Taquin.etatAleatoire(3);
+        Solution solution = Taquin.resolutionTaquin(etat_initial, 1);
+        chemin = solution.getCheminPriorite().getChemin();
+        etape = 0;
+        display();
+      }
+    });
+
+    item3.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent event){
+        etape = 0;
+        display();
+      }
+    });
+
+    item4.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent event){
+        etape = chemin.length - 1;
+        display();
+      }
+    });
+
+    item5.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent event){
+        System.exit(0);
+      }
+    });
   }
 
   public static void main(String[] args)
