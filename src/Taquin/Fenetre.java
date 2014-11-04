@@ -12,6 +12,7 @@ import java.awt.Color;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 public class Fenetre extends JFrame
 {
@@ -28,11 +29,13 @@ public class Fenetre extends JFrame
     private JMenu menu_fichier = new JMenu("Fichier");
     private JMenu menu_fichier_nouveau = new JMenu("Nouveau");
     private JMenu menu_edition = new JMenu("Edition");
+    private JMenu menu_aide = new JMenu("?");
     private JMenuItem item1 = new JMenuItem("Aléatoire");
     private JMenuItem item2 = new JMenuItem("Manuel");
     private JMenuItem item3 = new JMenuItem("Début");
     private JMenuItem item4 = new JMenuItem("Fin");
     private JMenuItem item5 = new JMenuItem("Quitter");
+    private JMenuItem item6 = new JMenuItem("A propos");
   
   public Fenetre()
   {
@@ -67,7 +70,6 @@ public class Fenetre extends JFrame
             {
                 etape--;
                 display();
-                getContentPane().revalidate();
             }
         });
 
@@ -80,16 +82,6 @@ public class Fenetre extends JFrame
         });
 
     display();
-
-    menu_fichier_nouveau.add(item1);
-    menu_fichier_nouveau.add(item2);
-    menu_fichier.add(menu_fichier_nouveau);
-    menu_fichier.add(item5);
-    menu_edition.add(item3);
-    menu_edition.add(item4);
-    menuBar.add(menu_fichier);
-    menuBar.add(menu_edition);
-    setJMenuBar(menuBar);
 
     initMenu();
 
@@ -108,7 +100,6 @@ public class Fenetre extends JFrame
         {
             b.setText(" ");
             b.setBackground(Color.lightGray);
-            
         }
 
         taquin.add(b);
@@ -132,6 +123,18 @@ public class Fenetre extends JFrame
 
   public void initMenu()
   {
+    menu_fichier_nouveau.add(item1);
+    menu_fichier_nouveau.add(item2);
+    menu_fichier.add(menu_fichier_nouveau);
+    menu_fichier.add(item5);
+    menu_edition.add(item3);
+    menu_edition.add(item4);
+    menu_aide.add(item6);
+    menuBar.add(menu_fichier);
+    menuBar.add(menu_edition);
+    menuBar.add(menu_aide);
+    setJMenuBar(menuBar);
+
     item1.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent event){
         Etat etat_initial = Taquin.etatAleatoire(3);
@@ -159,6 +162,13 @@ public class Fenetre extends JFrame
     item5.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent event){
         System.exit(0);
+      }
+    });
+
+    item6.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent event){
+        JOptionPane jop = new JOptionPane();
+        jop.showMessageDialog(null, "Programme réalisé par par Maxime Kermarquer et Théo Chelim.\nPour un projet d'I.A. à l'université d'Evry, en L3 CILS.", "Information", JOptionPane.INFORMATION_MESSAGE);
       }
     });
   }
