@@ -39,9 +39,8 @@ public class Fenetre extends JFrame
   
   public Fenetre()
   {
-    this.setTitle("Taquin");
+    this.setTitle("Résolution de taquin");
     this.setSize(300, 300);
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setLocationRelativeTo(null);
     
     etape = 0;

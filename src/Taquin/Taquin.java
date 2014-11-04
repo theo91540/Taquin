@@ -4,19 +4,91 @@ import java.util.*;
 
 public class Taquin
 {
+	private static boolean continuer = true;
+
 	public static void main(String[] args)
 	{
+		do
+		{
+			Scanner sc = new Scanner(System.in);
+			int choix;
+
+			System.out.println("\n##############################");
+			System.out.println("###### Menu Principal : ######");
+			System.out.println("##############################\n");
+			System.out.println("1) Saisir un taqin puis résolution en console");
+			System.out.println("2) Saisir un taqin puis résolution graphique");
+			System.out.println("3) Résolution d'un taquin aléatoire en console");
+			System.out.println("4) Résolution d'un taquin aléatoire graphique");
+			System.out.println("5) Expérimentations sur la résolution de taquin");
+			System.out.println("6) Quitter le programme\n");
+			System.out.print("Votre choix : ");
+			
+			choix = sc.nextInt();
+
+			menu(choix);
+
+		} while(continuer);
+
+		System.out.println("Fin du programme.");
+	}
+
+	public static void menu(int choix)
+	{
 		final int N = 3;
-		final int NB_MAX = 10000;
-		
+
+		switch(choix)
+		{
+			case 1:
+			{
+				console(saisirEtat(N));
+				break;
+			}
+			case 2:
+			{
+				System.out.println("A venir ...");
+				break;
+			}
+			case 3:
+			{
+				console(etatAleatoire(N));
+				break;
+			}
+			case 4:
+			{
+				new Fenetre();
+				break;
+			}
+			case 5:
+			{
+				experimentations();
+				break;
+			}
+			case 6:
+			{
+				continuer = false;
+				break;
+			}
+			default:
+			{
+				System.out.println("Ce choix est invalide.");
+				break;
+			}
+		}
+	}
+
+	public static void experimentations()
+	{
+		final int NB_MAX = 10_000;
+
 		long startTime = System.currentTimeMillis();
-/*
+
 		for(int d=1; d<=6; d++)
 		{
 			ArrayList<Solution> solutions = new ArrayList<Solution>();
 			for(int i=0; i<NB_MAX; i++)
 			{
-					Etat etat_initial = etatAleatoire(N); 
+					Etat etat_initial = etatAleatoire(3); 
 					solutions.add(resolutionTaquin(etat_initial, d));
 			}
 			
@@ -29,13 +101,8 @@ public class Taquin
 
 		long endTime = System.currentTimeMillis();
 
-	*/
-		Etat etat_initial = etatAleatoire(N); 
-		Solution s = resolutionTaquin(etat_initial, 1);
-
-		System.out.println(s.toString());
-		
-		// System.out.println("Durée du programme pour 1 taquins à résoudre: " + ((endTime-startTime)/1000)/60 + "min" + ((endTime-startTime)/1000)%60 + "s.");
+		System.out.println("Durée du programme pour 6x"+NB_MAX+" taquins à résoudre: " + ((endTime-startTime)/1000)/60 + "min" + ((endTime-startTime)/1000)%60 + "s.");
+	
 	}
 
 	public static Solution resolutionTaquin(Etat etat_initial, int d)
@@ -123,5 +190,25 @@ public class Taquin
 	public static void afficherEtat(Etat e)
 	{
 		System.out.println(e.toString());
+	}
+
+	public static void console(Etat initial)
+	{
+		int d;
+		Scanner sc = new Scanner(System.in);
+		Etat etat_initial = initial; 
+		
+		do 
+		{
+			System.out.println("Saisir la distance de Manhattan a utiliser : ");
+			d = sc.nextInt();
+		
+			if(d<1 || d>6)
+				System.out.println("La distance de Manhattan doit etre comprise entre 1 et 6.");
+	
+		} while(d<1 || d>6);
+	
+		Solution s = resolutionTaquin(etat_initial, d);
+		System.out.println(s.toString());
 	}
 }
