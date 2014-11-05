@@ -16,9 +16,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.ButtonGroup;
 import javax.swing.JRadioButtonMenuItem;
+import java.awt.Dimension;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class Fenetre extends JFrame
 {
+    private boolean image;
+
     private JPanel top;
     private JPanel taquin;
     private JPanel bottom;
@@ -38,7 +48,7 @@ public class Fenetre extends JFrame
     private JMenu menu_fichier_nouveau = new JMenu("Nouveau");
     private JMenu menu_edition = new JMenu("Edition");
     private JMenu menu_edition_distance = new JMenu("Distance");
-    private JMenu menu_informations = new JMenu("Informations");
+    private JMenu menu_affichage = new JMenu("Affichage");
     private JMenu menu_aide = new JMenu("?");
     private JMenuItem item1 = new JMenuItem("Aléatoire");
     private JMenuItem item2 = new JMenuItem("Manuel");
@@ -47,6 +57,8 @@ public class Fenetre extends JFrame
     private JMenuItem item5 = new JMenuItem("Quitter");
     private JMenuItem item6 = new JMenuItem("A propos");
     private JMenuItem item7 = new JMenuItem("Solution");
+    private JMenuItem item8 = new JMenuItem("Chiffres");
+    private JMenuItem item9 = new JMenuItem("Image");
     private JRadioButtonMenuItem jcmi1 = new JRadioButtonMenuItem("D1");
     private JRadioButtonMenuItem jcmi2 = new JRadioButtonMenuItem("D2");
     private JRadioButtonMenuItem jcmi3 = new JRadioButtonMenuItem("D3");
@@ -58,11 +70,14 @@ public class Fenetre extends JFrame
   public Fenetre(boolean saisir_taquin)
   {
     this.setTitle("Résolution de taquin");
-    this.setSize(300, 300);
+    this.setSize(300, 375);
+    this.setResizable(false);
     this.setLocationRelativeTo(null);
     
     initMenu();
     
+    image = false;
+
     jop = new JOptionPane();
 
     etape = 0;
@@ -136,16 +151,35 @@ public class Fenetre extends JFrame
 
   public void afficherTaquin(Etat etat)
   {
+
     taquin.removeAll();
+ 
     int[] tab = etat.getTab();
     for(int i=0; i<tab.length; i++)
     {
-        JButton b = new JButton(tab[i]+"");
-        b.setEnabled(false);
+        JButton b = new JButton();
+
         if(tab[i] == tab.length-1)
         {
             b.setText(" ");
             b.setBackground(Color.lightGray);
+        }
+        else
+        {
+            if(image)
+            {
+                ImageIcon icon = new ImageIcon(getClass().getResource("/images/photo.jpg")); 
+                Image img = icon.getImage(); 
+                BufferedImage bi = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB); 
+                Graphics g = bi.createGraphics(); 
+                g.drawImage(img, -(100*(tab[i]%3)), -(100*(tab[i]/3)), 300, 300, null); 
+                b.setIcon(new ImageIcon(bi));
+            }
+            else
+            {
+                b.setText(""+tab[i]);  
+                b.setEnabled(false);
+            }
         }
 
         taquin.add(b);
@@ -157,6 +191,8 @@ public class Fenetre extends JFrame
     item3.setEnabled(true);
     item4.setEnabled(true);
     item7.setEnabled(true);
+    item8.setEnabled(true);
+    item9.setEnabled(true);
 
     label.setText("Etape " + etape + " sur " + (chemin.length-1));
     top.removeAll();
@@ -176,6 +212,8 @@ public class Fenetre extends JFrame
     item3.setEnabled(false);
     item4.setEnabled(false);
     item7.setEnabled(false);
+    item8.setEnabled(false);
+    item9.setEnabled(false);
 
     label.setText("Saisir le taquin initial :");
     top.removeAll();
@@ -213,11 +251,14 @@ public class Fenetre extends JFrame
     menu_edition_distance.add(jcmi4);
     menu_edition_distance.add(jcmi5);
     menu_edition_distance.add(jcmi6);
-    menu_informations.add(item7);
+    menu_affichage.add(item7);
+    menu_affichage.addSeparator();
+    menu_affichage.add(item8);
+    menu_affichage.add(item9);
     menu_aide.add(item6);
     menuBar.add(menu_fichier);
     menuBar.add(menu_edition);
-    menuBar.add(menu_informations);
+    menuBar.add(menu_affichage);
     menuBar.add(menu_aide);
     setJMenuBar(menuBar);
 
@@ -281,6 +322,20 @@ public class Fenetre extends JFrame
         s += ("Nombre d'etat sortis de la file: " + solution.getNbSortis() + "\n");
         s += ("Taille du chemin de la solution: " + solution.getCheminPriorite().getLongueur() + "\n");
         jop.showMessageDialog(null, s, "Information", JOptionPane.INFORMATION_MESSAGE);
+      }
+    });
+
+    item8.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent event){
+        image = false;
+        display();
+      }
+    });
+
+    item9.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent event){
+        image = true;
+        display();
       }
     });
   }
