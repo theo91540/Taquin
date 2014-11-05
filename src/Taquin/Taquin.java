@@ -16,8 +16,8 @@ public class Taquin
 			System.out.println("\n##############################");
 			System.out.println("###### Menu Principal : ######");
 			System.out.println("##############################\n");
-			System.out.println("1) Saisir un taqin puis résolution en console");
-			System.out.println("2) Saisir un taqin puis résolution graphique");
+			System.out.println("1) Saisir un taquin puis résolution en console");
+			System.out.println("2) Saisir un taquin puis résolution graphique");
 			System.out.println("3) Résolution d'un taquin aléatoire en console");
 			System.out.println("4) Résolution d'un taquin aléatoire graphique");
 			System.out.println("5) Expérimentations sur la résolution de taquin");
@@ -46,7 +46,7 @@ public class Taquin
 			}
 			case 2:
 			{
-				System.out.println("A venir ...");
+				new Fenetre(true);
 				break;
 			}
 			case 3:
@@ -56,7 +56,7 @@ public class Taquin
 			}
 			case 4:
 			{
-				new Fenetre();
+				new Fenetre(false);
 				break;
 			}
 			case 5:

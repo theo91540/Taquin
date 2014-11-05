@@ -13,7 +13,18 @@ public class Etat
 		this.N = N;
 	}
 
+	/*
+		Accesseur du tableau d'entiers
+	*/
+	public int[] getTab()
+	{
+		return this.etat;
+	}
 
+	/*
+		Methode permettant d'optenir la liste des successeurs de l'etat
+		a partir des 4 directions NORD, SUD, EST et OUEST si elles sont realisables
+	*/
 	public Etat[] getSuccesseurs()
 	{
 		final int NORD = 0, SUD = 1, EST = 2, OUEST = 3;
@@ -82,6 +93,9 @@ public class Etat
 		return successeurs.toArray(new Etat[successeurs.size()]);
 	}
 
+	/*
+		Methode calculant epsilon qui est la distance elementaire de chaque case de l'etat
+	*/
 	public int[] epsilon()
 	{
 		int[] epsilon = new int[N*N];
@@ -92,6 +106,10 @@ public class Etat
 		return epsilon;
 	}
 
+	/*
+		Methode calculant la distance de l'etat a l'etat final suivant la distance de manhattan choisie
+		cette distance est utilisée comme heuristique pour notre probleme de recherche
+	*/
 	public int distanceEtatFinal(int d)
 	{
 		int somme = 0;
@@ -112,6 +130,10 @@ public class Etat
 
 	}
 
+	/*
+		Est-ce que l'etat est un etat final ou non
+		On verifie que le tableau est trie
+	*/
 	public boolean etatFinal()
 	{
 		boolean etatFinal = true;
@@ -121,6 +143,11 @@ public class Etat
 		return etatFinal;
 	}
 
+	/* 
+		Est-ce que l'etat est un etat initial soluble ou non
+		On verifie pour cela que la parite du nombre d'echange 
+		est la meme que celle dela distance elementaire du trou.
+	*/
 	public boolean estSoluble()
 	{
 		boolean tab_en_ordre = false;
@@ -152,6 +179,12 @@ public class Etat
 	    return (nb_echanges%2)==(epsilon[etat.length-1]%2);
 	}
 
+	/*
+		Methode permettant de comparer deux etat entre eux
+		return -1 si l'etat est inferieur
+		return 1 si l'etat est superieur
+		0 sinon (egaux)
+	*/
 	public int compareTo(Etat e2)
 	{
 		for(int i=0; i<etat.length; i++)
@@ -165,6 +198,9 @@ public class Etat
 		return 0;
 	}
 
+	/*
+		Methode permettant de visualiser un etat
+	*/
 	public String toString()
 	{
 		String s = "";
@@ -179,10 +215,5 @@ public class Etat
 				s += "|\n";
 		}
 		return s;
-	}
-
-	public int[] getTab()
-	{
-		return this.etat;
 	}
 }
