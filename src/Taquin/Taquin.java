@@ -79,7 +79,7 @@ public class Taquin
 
 	public static void experimentations()
 	{
-		final int NB_MAX = 10_000;
+		final int NB_MAX = 1000;
 
 		long startTime = System.currentTimeMillis();
 
