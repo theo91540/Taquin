@@ -191,8 +191,17 @@ public class Fenetre extends JFrame
     item3.setEnabled(true);
     item4.setEnabled(true);
     item7.setEnabled(true);
-    item8.setEnabled(true);
-    item9.setEnabled(true);
+
+    if(!image)
+    {
+        item8.setEnabled(false);
+        item9.setEnabled(true);
+    }
+    else 
+    {
+        item8.setEnabled(true);
+        item9.setEnabled(false);
+    }
 
     label.setText("Etape " + etape + " sur " + (chemin.length-1));
     top.removeAll();
@@ -214,7 +223,7 @@ public class Fenetre extends JFrame
     item7.setEnabled(false);
     item8.setEnabled(false);
     item9.setEnabled(false);
-
+ 
     label.setText("Saisir le taquin initial :");
     top.removeAll();
     top.add(label);
@@ -328,6 +337,8 @@ public class Fenetre extends JFrame
     item8.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent event){
         image = false;
+        item8.setEnabled(false);
+        item9.setEnabled(true);
         display();
       }
     });
@@ -335,6 +346,8 @@ public class Fenetre extends JFrame
     item9.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent event){
         image = true;
+        item8.setEnabled(true);
+        item9.setEnabled(false);
         display();
       }
     });
