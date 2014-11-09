@@ -123,7 +123,10 @@ public class Etat
 		int[] epsilon = epsilon();
 		for(int i=0;i<epsilon.length; i++)
 		{
-			somme += (epsilon[i] * poids[d-1][i%9]);
+			if(N==3)
+				somme += (epsilon[i] * poids[d-1][i%9]);
+			else 
+				somme += epsilon[i] * ((i!=epsilon.length-1)?1:0);
 		}
 
 		return somme / ((d%2==0)?1:4);
@@ -146,7 +149,7 @@ public class Etat
 	/* 
 		Est-ce que l'etat est un etat initial soluble ou non
 		On verifie pour cela que la parite du nombre d'echange 
-		est la meme que celle dela distance elementaire du trou.
+		est la meme que celle de la distance elementaire du trou.
 	*/
 	public boolean estSoluble()
 	{

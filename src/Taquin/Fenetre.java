@@ -351,7 +351,28 @@ public class Fenetre extends JFrame
         display();
       }
     });
+
+    class DistanceListener implements ActionListener
+   {
+      public void actionPerformed(ActionEvent event)
+      {
+        solution = Taquin.resolutionTaquin(etat_initial, distanceChoisie());
+        chemin = solution.getCheminPriorite().getChemin();
+        etape = 0;
+        display();
+      }
+    }
+
+    DistanceListener dl = new DistanceListener();
+
+    jcmi1.addActionListener(dl);
+    jcmi2.addActionListener(dl);
+    jcmi3.addActionListener(dl);
+    jcmi4.addActionListener(dl);
+    jcmi5.addActionListener(dl);
+    jcmi6.addActionListener(dl);
   }
+
 
   public int distanceChoisie()
   {

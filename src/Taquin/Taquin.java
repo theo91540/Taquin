@@ -35,13 +35,13 @@ public class Taquin
 
 	public static void menu(int choix)
 	{
-		final int N = 3;
+		final int N = 4;
 
 		switch(choix)
 		{
 			case 1:
 			{
-				console(saisirEtat(N));
+				console(saisirEtat(saisirN()));
 				break;
 			}
 			case 2:
@@ -51,7 +51,7 @@ public class Taquin
 			}
 			case 3:
 			{
-				console(etatAleatoire(N));
+				console(etatAleatoire(saisirN()));
 				break;
 			}
 			case 4:
@@ -79,24 +79,41 @@ public class Taquin
 
 	public static void experimentations()
 	{
-		final int NB_MAX = 1000;
+		final int NB_MAX = 1_000;
 
 		long startTime = System.currentTimeMillis();
-
+		Etat[] etats_initiaux = new Etat[NB_MAX];
+		
+		for(int i=0; i<NB_MAX; i++)
+		{
+			etats_initiaux[i] = etatAleatoire(3);
+		}
+		
 		for(int d=1; d<=6; d++)
 		{
 			ArrayList<Solution> solutions = new ArrayList<Solution>();
 			for(int i=0; i<NB_MAX; i++)
 			{
-					Etat etat_initial = etatAleatoire(3); 
-					solutions.add(resolutionTaquin(etat_initial, d));
+				solutions.add(resolutionTaquin(etats_initiaux[i], d));
 			}
 			
-			long somme = 0;
+			long somme_duree = 0;
+			long somme_longueur = 0;
+			long somme_visites = 0;
+			long somme_sortis = 0;
 			for(int i=0; i<solutions.size(); i++)
-				somme += solutions.get(i).getDuree();
-		
-			System.out.println("Temps moyen de résolution d'un taquin pour d"+d+" ("+NB_MAX+" taquins résolus): " + (somme/solutions.size()) + "ms.");
+			{
+				somme_duree += solutions.get(i).getDuree();
+				somme_longueur += solutions.get(i).getCheminPriorite().getLongueur();
+				somme_visites += solutions.get(i).getNbVisites();
+				somme_sortis += solutions.get(i).getNbSortis();
+			}
+			
+			System.out.println("* Résolution de taquins pour la distance d" + d + ": ");
+			System.out.println("\tTemps moyen de résolution d'un taquin pour d"+d+" ("+NB_MAX+" taquins résolus): " + (somme_duree/solutions.size()) + "ms.");
+			System.out.println("\tLongueur moyenne de la solution d'un taquin pour d"+d+" ("+NB_MAX+" taquins résolus): " + (somme_longueur/solutions.size()) + ".");
+			System.out.println("\tNombre d'etats visites en moyenne pour d"+d+" ("+NB_MAX+" taquins résolus): " + (somme_visites/solutions.size()) + ".");
+			System.out.println("\tNombre d'etats sortis de la file en moyenne pour d"+d+" ("+NB_MAX+" taquins résolus): " + (somme_sortis/solutions.size()) + ".\n");
 		}
 
 		long endTime = System.currentTimeMillis();
@@ -210,5 +227,23 @@ public class Taquin
 	
 		Solution s = resolutionTaquin(etat_initial, d);
 		System.out.println(s.toString());
+	}
+
+	public static int saisirN()
+	{
+		int d;
+		Scanner sc = new Scanner(System.in);
+		
+		do 
+		{
+			System.out.println("Saisir N : ");
+			d = sc.nextInt();
+		
+			if(d<2)
+				System.out.println("N doit etre superieur a 2.");
+	
+		} while(d<2);
+	
+		return d;
 	}
 }
