@@ -113,7 +113,7 @@ public class Taquin
 			System.out.println("\tTemps moyen de résolution d'un taquin pour d"+d+" ("+NB_MAX+" taquins résolus): " + (somme_duree/solutions.size()) + "ms.");
 			System.out.println("\tLongueur moyenne de la solution d'un taquin pour d"+d+" ("+NB_MAX+" taquins résolus): " + (somme_longueur/solutions.size()) + ".");
 			System.out.println("\tNombre d'etats visites en moyenne pour d"+d+" ("+NB_MAX+" taquins résolus): " + (somme_visites/solutions.size()) + ".");
-			System.out.println("\tNombre d'etats sortis de la file en moyenne pour d"+d+" ("+NB_MAX+" taquins résolus): " + (somme_sortis/solutions.size()) + ".\n");
+			System.out.println("\tNombre de chemins sortis de la file en moyenne pour d"+d+" ("+NB_MAX+" taquins résolus): " + (somme_sortis/solutions.size()) + ".\n");
 		}
 
 		long endTime = System.currentTimeMillis();
